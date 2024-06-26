@@ -38,7 +38,7 @@ RETRY_INTERVAL="${RETRY_INTERVAL:-86400}"
 # ========================
 
 # Main loop to renew certificates every 24 hours
-while [ "$SHOULD_STOP" -eq 0 ]; do
+while true; do
   # Wait before next renewal check
   echo "Waiting before renewal check..."
   sleep "$RETRY_INTERVAL"
