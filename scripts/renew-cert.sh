@@ -44,6 +44,5 @@ while true; do
   sleep "$RETRY_INTERVAL"
 
   echo "Trying to renew certificates..."
-  # dry run if mode is dev
   certbot renew --deploy-hook="/scripts/reload-nginx.sh"
 done
