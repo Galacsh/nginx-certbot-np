@@ -1,0 +1,8 @@
+services:
+  nginx:
+    volumes:
+      - ./conf.d/prod:/etc/nginx/templates
+    ports:
+      - 443:443
+    env_file:
+      - .env.local

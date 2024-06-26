@@ -1,0 +1,20 @@
+name: ws
+
+services:
+  nginx:
+    build:
+      context: .
+    volumes:
+      - ./conf.d/dev:/etc/nginx/templates
+      - ./html:/usr/share/nginx/html
+      - etc-letsencrypt:/etc/letsencrypt
+      - lib-letsencrypt:/var/lib/letsencrypt
+      - acme-challenge:/var/www/acme-challenge
+    ports:
+      - 80:80
+    env_file:
+      - .env
+volumes:
+  etc-letsencrypt:
+  lib-letsencrypt:
+  acme-challenge:
