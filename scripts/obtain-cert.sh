@@ -48,7 +48,7 @@ obtain_certificate() {
   fi
 
   # ssl_dhparam.pem for a secure configuration
-  if [ ! -f /etc/nginx/ssl/dhparam.pem ]; then
+  if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
     echo "Generating ssl-dhparams.pem file..."
     openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
     echo "dhparam.pem file generated."
