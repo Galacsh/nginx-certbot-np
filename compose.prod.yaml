@@ -1,5 +1,6 @@
 services:
   nginx:
+    restart: always
     volumes:
       - ./templates/prod:/etc/nginx/templates
     ports:
