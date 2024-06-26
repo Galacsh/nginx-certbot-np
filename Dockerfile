@@ -34,6 +34,8 @@ COPY scripts /scripts
 RUN chmod +x /scripts/*.sh
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+COPY conf.d/ /etc/nginx/conf.d/
+RUN chown -R $nonroot:$nonroot /etc/nginx/conf.d/
 
 ##############################################
 # Main

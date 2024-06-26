@@ -5,7 +5,6 @@ services:
     build:
       context: .
     volumes:
-      - ./conf.d:/etc/nginx/conf.d
       - ./templates/dev:/etc/nginx/templates
       - ./html:/usr/share/nginx/html
       - etc-letsencrypt:/etc/letsencrypt
