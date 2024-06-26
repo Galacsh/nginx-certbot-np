@@ -43,7 +43,7 @@ obtain_certificate() {
       -d "$_domain" \
       --email "$EMAIL" \
       --agree-tos \
-      --no-eff-email --dry-run
+      --no-eff-email
     echo "Certificate obtained for $_domain."
   fi
 }
