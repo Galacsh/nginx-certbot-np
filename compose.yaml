@@ -14,7 +14,17 @@ services:
       - 80:80
     env_file:
       - .env
+    networks:
+      - nginx
+
+networks:
+  nginx:
+    name: nginx
+
 volumes:
   etc-letsencrypt:
+    name: etc-letsencrypt
   lib-letsencrypt:
+    name: lib-letsencrypt
   acme-challenge:
+    name: acme-challenge
