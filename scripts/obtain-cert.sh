@@ -46,6 +46,21 @@ obtain_certificate() {
       --no-eff-email
     echo "Certificate obtained for $_domain."
   fi
+
+  # ssl_dhparam.pem for a secure configuration
+  if [ ! -f /etc/nginx/ssl/dhparam.pem ]; then
+    echo "Generating ssl-dhparams.pem file..."
+    openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
+    echo "dhparam.pem file generated."
+  fi
+
+  # options-ssl-nginx.conf for a secure configuration
+  if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ]; then
+    echo "Copying options-ssl-nginx.conf file..."
+    wget -O /etc/letsencrypt/options-ssl-nginx.conf \
+      https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf
+    echo "options-ssl-nginx.conf file copied."
+  fi
 }
 
 # Main loop to renew certificates every 24 hours

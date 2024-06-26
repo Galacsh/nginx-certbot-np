@@ -16,7 +16,7 @@ VOLUME [ "/etc/letsencrypt", "/var/lib/letsencrypt", "/acme-challenge" ]
 EXPOSE 80
 
 # Install Certbot
-RUN apk add --no-cache certbot certbot-nginx
+RUN apk add --no-cache certbot
 
 RUN mkdir -p /etc/letsencrypt ; \
     chown -R $nonroot:$nonroot /etc/letsencrypt
