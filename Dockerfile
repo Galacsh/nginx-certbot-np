@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1
 
-##############################################
-FROM nginxinc/nginx-unprivileged:stable-alpine
-##############################################
+##################################################
+FROM nginxinc/nginx-unprivileged:stable-alpine3.19
+##################################################
 
 # For convenience
 USER root
