@@ -1,9 +1,11 @@
 # Files to copy to the container
 /html/*
 !/html/this_is_placeholder
-/conf.d/prod/*
-!/conf.d/prod/http-to-https-template.for.copy
-!/conf.d/prod/https-template.for.copy
+/templates/prod/*
+!/templates/prod/http-to-https-template.for.copy
+!/templates/prod/https-template.for.copy
+/conf.d/*
+!/conf.d/this_is_placeholder
 
 # Environment file
 .env.local
