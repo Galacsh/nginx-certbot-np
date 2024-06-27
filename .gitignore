@@ -2,6 +2,7 @@
 /html/*
 !/html/this_is_placeholder
 /templates/prod/*
+!/templates/prod/default.conf.template.for.copy
 !/templates/prod/http-to-https-template.for.copy
 !/templates/prod/https-template.for.copy
 /conf.d/*
