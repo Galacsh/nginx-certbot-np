@@ -6,27 +6,43 @@ echo "Starting nginx-certbot..."
 set -e
 
 # ========================================================
+# Helper functions
+# ========================================================
+
+waitNginxStart() {
+  while ! pgrep -l nginx | grep master > /dev/null; do
+    echo "Waiting for nginx to start..."
+    sleep 1
+  done
+  echo "nginx started."
+}
+
+waitNginxStop() {
+  # check if nginx released the port
+  while netstat -tulnp | grep nginx; do
+      sleep 1
+  done
+  echo "nginx started."
+}
+
+# ========================================================
 
 # start nginx
-/docker-entrypoint.sh nginx
+/docker-entrypoint.sh "$1"
 
-# obtain certificates
+waitNginxStart
+
 /scripts/obtain-cert.sh
-
-# start background renew & nginx reload
 /scripts/renew-cert.sh &
 
 # ============================
 # == Restart nginx as PID 1 ==
 # ============================
 
-echo "Stopping NGINX..."
+echo "Stopping nginx..."
+
 # stop nginx and wait
 nginx -s stop
-while netstat -tulnp | grep nginx; do
-    sleep 1
-done
-echo "NGINX stopped."
+waitNginxStop
 
-echo "Starting NGINX..."
-exec nginx -g 'daemon off;'
+exec "$@"
