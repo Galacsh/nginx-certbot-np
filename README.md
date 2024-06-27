@@ -8,10 +8,10 @@ During the build process, the Certbot is installed and the necessary scripts are
 
 ## Image
 
-[galacsh/nginx-certbot](https://hub.docker.com/r/galacsh/nginx-certbot)
+[galacsh/nginx-certbot-np](https://hub.docker.com/r/galacsh/nginx-certbot-np)
 
 ```shell
-docker pull galacsh/nginx-certbot
+docker pull galacsh/nginx-certbot-np
 ```
 
 ## Structure
