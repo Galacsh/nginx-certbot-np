@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# If MODE is dev, exit right away
-if [ "$MODE" = "dev" ]; then
+# If MODE is not prod, exit right away
+if [ "$MODE" != "prod" ]; then
   echo "Will not try to obtain certificates in dev mode."
   exit 0
 fi
