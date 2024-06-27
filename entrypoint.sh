@@ -18,8 +18,9 @@ waitNginxStart() {
 }
 
 waitNginxStop() {
-  # check if nginx released the port
-  while netstat -tulnp | grep nginx; do
+  echo "Waiting for nginx to stop..."
+  echo "Will use netstat to check if nginx is still running."
+  while netstat -tulnp | grep nginx > /dev/null; do
       sleep 1
   done
   echo "nginx started."
