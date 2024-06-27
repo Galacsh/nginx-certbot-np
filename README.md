@@ -1,6 +1,6 @@
 # nginx with Certbot with non-privileged user
 
-This repository creates a Docker image for a nginx server with Certbot.
+[This repository](https://github.com/Galacsh/nginx-certbot) creates a Docker image for a nginx server with Certbot.
 All the processes are run as a non-privileged user (`nginx`).
 
 The image is based on the official nginx non-privileged image, `nginxinc/nginx-unprivileged`.
