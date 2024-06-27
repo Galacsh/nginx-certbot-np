@@ -12,7 +12,7 @@ ARG nonroot=nginx
 # Preparing
 ##############################################
 
-VOLUME [ "/etc/letsencrypt", "/var/lib/letsencrypt", "/acme-challenge" ]
+VOLUME [ "/etc/letsencrypt", "/var/lib/letsencrypt", "/usr/share/nginx/html" ]
 EXPOSE 80
 
 # Install Certbot
@@ -25,7 +25,8 @@ RUN mkdir -p /var/lib/letsencrypt ; \
 RUN mkdir -p /var/log/letsencrypt ; \
     chown -R $nonroot:$nonroot /var/log/letsencrypt
 
-# Webroot available for Certbot and Nginx
+# Webroot available for Certbot and nginx.
+# This directory does not need to be persistent.
 RUN mkdir -p /acme-challenge ; \
     chown -R $nonroot:$nonroot /acme-challenge ; \
     chmod -R 755 /acme-challenge
@@ -44,3 +45,4 @@ RUN chown -R $nonroot:$nonroot /etc/nginx/conf.d/
 # Switch to nginx and run
 USER $nonroot
 ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "nginx", "-g", "daemon off;" ]

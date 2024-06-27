@@ -1,7 +1,7 @@
-name: ws
+name: nginx-certbot
 
 services:
-  nginx:
+  app:
     build:
       context: .
     volumes:
@@ -9,7 +9,6 @@ services:
       - ./html:/usr/share/nginx/html
       - etc-letsencrypt:/etc/letsencrypt
       - lib-letsencrypt:/var/lib/letsencrypt
-      - acme-challenge:/var/www/acme-challenge
     ports:
       - 80:80
     env_file:
@@ -26,5 +25,3 @@ volumes:
     name: etc-letsencrypt
   lib-letsencrypt:
     name: lib-letsencrypt
-  acme-challenge:
-    name: acme-challenge
