@@ -30,21 +30,23 @@ fi
 
 # Function to handle certificate issuance or renewal
 obtain_certificate() {
-  _domain="${1}"
-  cert_path="/etc/letsencrypt/live/$_domain"
+  comma_seperated_domains="${1}"
+  base_domain=$(echo "$comma_seperated_domains" | cut -d ',' -f1)
+  cert_path="/etc/letsencrypt/live/$base_domain"
 
   if [ ! -d "$cert_path" ]; then
-    # No certificate, obtain one
-    echo "No certificate found for $_domain, obtaining one..."
+    echo "No certificate found for $base_domain, obtaining one..."
+
     # obtain using webroot plugin
     certbot certonly \
       --webroot \
       -w /acme-challenge \
-      -d "$_domain" \
+      -d "$comma_seperated_domains" \
       --email "$EMAIL" \
       --agree-tos \
       --no-eff-email
-    echo "Certificate obtained for $_domain."
+
+    echo "Certificate obtained for $base_domain"
   fi
 
   # ssl_dhparam.pem for a secure configuration
@@ -63,7 +65,6 @@ obtain_certificate() {
   fi
 }
 
-# Main loop to renew certificates every 24 hours
 for domain in $DOMAINS; do
   obtain_certificate "$domain"
 done
