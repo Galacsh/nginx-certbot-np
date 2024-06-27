@@ -5,7 +5,7 @@
 Help()
 {
    # Display Help
-   echo "Stop NGINX"
+   echo "Stop nginx"
    echo
    echo "Syntax: ./stop.sh [dev]"
    echo

@@ -4,4 +4,4 @@ echo "Certificates renewed. Reloading nginx..."
 
 nginx -s reload
 
-echo "Nginx reloaded."
+echo "nginx reloaded."
