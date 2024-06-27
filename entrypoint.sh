@@ -23,7 +23,7 @@ waitNginxStop() {
   while netstat -tulnp | grep nginx > /dev/null; do
       sleep 1
   done
-  echo "nginx started."
+  echo "nginx stopped."
 }
 
 # ========================================================
