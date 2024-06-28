@@ -204,9 +204,9 @@ services:
 
 volumes:
   etc-letsencrypt:
-    name: etc-letsencrypt
+    external: true
   lib-letsencrypt:
-    name: lib-letsencrypt
+    external: true
 ```
 
 **3. `/etc/nginx/templates`**

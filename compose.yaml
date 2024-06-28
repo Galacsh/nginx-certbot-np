@@ -5,21 +5,7 @@ services:
     volumes:
       - ./templates/dev:/etc/nginx/templates
       - ./html:/usr/share/nginx/html
-      - etc-letsencrypt:/etc/letsencrypt
-      - lib-letsencrypt:/var/lib/letsencrypt
     ports:
       - 80:80
     env_file:
       - .env
-    networks:
-      - nginx
-
-networks:
-  nginx:
-    name: nginx
-
-volumes:
-  etc-letsencrypt:
-    name: etc-letsencrypt
-  lib-letsencrypt:
-    name: lib-letsencrypt
