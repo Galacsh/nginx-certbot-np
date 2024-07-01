@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ############################################################
 
 # Set current directory
@@ -18,9 +20,11 @@ if [ -z "$VERSION" ]; then
 fi
 
 # Build image and tag with version and latest
-docker build -t "$REPOSITORY:$VERSION" .
-docker tag "$REPOSITORY:$VERSION" "$REPOSITORY:latest"
+# Supports: linux/arm/v6, linux/amd64
 
-# Push images
-docker push "$REPOSITORY:$VERSION"
-docker push "$REPOSITORY:latest"
+# Create builder if not exists
+if ! docker buildx inspect nginx-certbot-np-builder &>/dev/null; then
+  docker buildx create --name nginx-certbot-np-builder
+fi
+
+docker buildx build --push --builder nginx-certbot-np-builder --platform linux/arm/v6,linux/amd64 -t "$REPOSITORY:$VERSION" -t "$REPOSITORY:latest" .

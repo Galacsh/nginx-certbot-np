@@ -16,7 +16,7 @@ VOLUME [ "/etc/letsencrypt", "/var/lib/letsencrypt", "/usr/share/nginx/html" ]
 EXPOSE 80
 
 # Install Certbot
-RUN apk add --no-cache "certbot=2.7.4-r0" "openssl=3.1.5-r0"
+RUN apk add --no-cache "certbot" "openssl"
 
 RUN mkdir -p /etc/letsencrypt ; \
     chown -R $nonroot:$nonroot /etc/letsencrypt

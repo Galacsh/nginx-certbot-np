@@ -14,6 +14,14 @@ During the build process, the Certbot is installed and the necessary scripts are
 docker pull galacsh/nginx-certbot-np
 ```
 
+### Supported architectures
+
+Even nginx supports many architectures, Certbot only supports the following architectures.
+So, this image is only available for the following architectures.
+
+- linux/arm/v6
+- linux/amd64
+
 ## Structure
 
 - `conf.d/`: Files to be copied to the `/etc/nginx/conf.d` directory.
@@ -169,11 +177,9 @@ docker stop nginx-certbot
 
 ---
 
-## Building the Image
+## Build & Push the Image
 
 ```shell
-echo "Building the image..." && \
-  IMAGE_NAME="galacsh/nginx-certbot-np" && \
-  IMAGE_VERSION=""
-docker build -t galacsh/nginx-certbot-np .
+git commit -m "commit message should contain something like v1.0.1"
+./build.sh
 ```
