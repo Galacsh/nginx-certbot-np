@@ -1,12 +1,6 @@
 # Files to copy to the container
 /conf.d/*
 !/conf.d/.gitkeep
-/html/*
-!/html/.gitkeep
-/templates/prod/*
-!/templates/prod/default.conf.template.for.copy
-!/templates/prod/http-to-https-template.for.copy
-!/templates/prod/https-template.for.copy
 
 # Environment file
 .env.local
