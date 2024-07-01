@@ -1,6 +1,6 @@
-# nginx with Certbot with non-privileged user
+# Run nginx and Certbot with a non-privileged user
 
-[This repository](https://github.com/Galacsh/nginx-certbot) creates a Docker image for a nginx server with Certbot.
+[This repository](https://github.com/Galacsh/nginx-certbot-np) creates a Docker image for a nginx server with Certbot.
 All the processes are run as a non-privileged user (`nginx`).
 
 The image is based on the official nginx non-privileged image, `nginxinc/nginx-unprivileged`.
@@ -165,4 +165,15 @@ server {
 
 ```shell
 docker stop nginx-certbot
+```
+
+---
+
+## Building the Image
+
+```shell
+echo "Building the image..." && \
+  IMAGE_NAME="galacsh/nginx-certbot-np" && \
+  IMAGE_VERSION=""
+docker build -t galacsh/nginx-certbot-np .
 ```
