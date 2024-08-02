@@ -9,19 +9,19 @@ set -e
 # Helper functions
 # ========================================================
 
-waitNginxStart() {
-  while ! pgrep -l nginx | grep master > /dev/null; do
+wait_nginx_start() {
+  while ! pgrep -l nginx | grep master >/dev/null; do
     echo "Waiting for nginx to start..."
     sleep 1
   done
   echo "nginx started."
 }
 
-waitNginxStop() {
+wait_nginx_stop() {
   echo "Waiting for nginx to stop..."
   echo "Will use netstat to check if nginx is still running."
-  while netstat -tulnp | grep nginx > /dev/null; do
-      sleep 1
+  while netstat -tulnp | grep nginx >/dev/null; do
+    sleep 1
   done
   echo "nginx stopped."
 }
@@ -31,7 +31,7 @@ waitNginxStop() {
 # start nginx
 /docker-entrypoint.sh "$1"
 
-waitNginxStart
+wait_nginx_start
 
 /scripts/obtain-cert.sh
 /scripts/renew-cert.sh &
@@ -44,6 +44,6 @@ echo "Stopping nginx..."
 
 # stop nginx and wait
 nginx -s stop
-waitNginxStop
+wait_nginx_stop
 
 exec "$@"

@@ -48,15 +48,19 @@ obtain_certificate() {
 
     echo "Certificate obtained for $base_domain"
   fi
+}
 
-  # ssl_dhparam.pem for a secure configuration
+# ssl_dhparam.pem for a secure configuration
+setup_ssl_dhparam() {
   if [ ! -f /etc/letsencrypt/ssl-dhparams.pem ]; then
     echo "Generating ssl-dhparams.pem file..."
     openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
     echo "dhparam.pem file generated."
   fi
+}
 
-  # options-ssl-nginx.conf for a secure configuration
+# options-ssl-nginx.conf for a secure configuration
+setup_options_ssl_nginx() {
   if [ ! -f /etc/letsencrypt/options-ssl-nginx.conf ]; then
     echo "Copying options-ssl-nginx.conf file..."
     wget -O /etc/letsencrypt/options-ssl-nginx.conf \
@@ -64,6 +68,11 @@ obtain_certificate() {
     echo "options-ssl-nginx.conf file copied."
   fi
 }
+
+# ==============================
+
+setup_ssl_dhparam
+setup_options_ssl_nginx
 
 for domain in $DOMAINS; do
   obtain_certificate "$domain"

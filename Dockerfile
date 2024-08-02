@@ -5,37 +5,41 @@ FROM nginxinc/nginx-unprivileged:stable-alpine3.19
 ##################################################
 
 # For convenience
-USER root
+EXPOSE 80
+EXPOSE 443
+
+VOLUME [ "/etc/letsencrypt", "/var/lib/letsencrypt", "/usr/share/nginx/html" ]
+
 ARG nonroot=nginx
 
 ##############################################
-# Preparing
-##############################################
-
-VOLUME [ "/etc/letsencrypt", "/var/lib/letsencrypt", "/usr/share/nginx/html" ]
-EXPOSE 80
 
 # Install Certbot
+USER root
 RUN apk add --no-cache "certbot" "openssl"
 
 RUN mkdir -p /etc/letsencrypt ; \
-    chown -R $nonroot:$nonroot /etc/letsencrypt
+  chown -R $nonroot:$nonroot /etc/letsencrypt
 RUN mkdir -p /var/lib/letsencrypt ; \
-    chown -R $nonroot:$nonroot /var/lib/letsencrypt
+  chown -R $nonroot:$nonroot /var/lib/letsencrypt
 RUN mkdir -p /var/log/letsencrypt ; \
-    chown -R $nonroot:$nonroot /var/log/letsencrypt
+  chown -R $nonroot:$nonroot /var/log/letsencrypt
 
-# Webroot available for Certbot and nginx.
+# Default conf file that does:
+#   - HTTP to HTTPS redirection
+#   - ACME challenge
+COPY --chown=$nonroot:$nonroot ./conf.d/http-default.conf /etc/nginx/conf.d/http-default.conf
+
+# For ACME challenge.
 # This directory does not need to be persistent.
 RUN mkdir -p /acme-challenge ; \
-    chown -R $nonroot:$nonroot /acme-challenge ; \
-    chmod -R 755 /acme-challenge
+  chown -R $nonroot:$nonroot /acme-challenge ; \
+  chmod -R 755 /acme-challenge
 
 COPY scripts /scripts
 RUN chmod +x /scripts/*.sh
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-COPY conf.d/ /etc/nginx/conf.d/
 RUN chown -R $nonroot:$nonroot /etc/nginx/conf.d/
 
 ##############################################

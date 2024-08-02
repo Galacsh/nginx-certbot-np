@@ -1,7 +1,3 @@
-# Files to copy to the container
-/conf.d/*
-!/conf.d/.gitkeep
-
 # Environment file
 .env.local
 

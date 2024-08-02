@@ -24,7 +24,9 @@ So, this image is only available for the following architectures.
 
 ## Structure
 
-- `conf.d/`: Files to be copied to the `/etc/nginx/conf.d` directory.
+- `conf.d/http-default.conf`: Default config file to handle http requests.
+    - HTTP to HTTPS redirection
+    - Location for ACME challenge
 - `scripts/`: Shell scripts to the nginx server and SSL certificates.
     - `obtain-cert.sh`: Obtain the SSL certificates if they do not exist.
     - `renew-cert.sh`: Tries to renew the SSL certificates every `RETRY_INTERVAL` seconds.
@@ -32,15 +34,6 @@ So, this image is only available for the following architectures.
 - `entrypoint.sh`: Entrypoint script for the Docker container.
 - `Dockerfile`: The Dockerfile for the image.
 - `.env`: Environment variables for the Docker Compose configuration.
-
-### `conf.d/`
-
-The `conf.d/` directory contains the configuration files for the nginx server.
-These files are copied to the `/etc/nginx/conf.d` directory during the build process.
-
-Note that **during the startup**, configuration templates inside `templates/` directory will be processed and copied to
-the `/etc/nginx/conf.d` directory. This means that the configuration files with the same name inside the `conf.d/`
-directory will be overwritten.
 
 ### `scripts/`
 
@@ -92,7 +85,7 @@ The Dockerfile is based on the official nginx non-privileged image, `nginxinc/ng
 During the build process, the Certbot is installed and the necessary scripts are added to the image.
 
 Since this image's entrypoint is just a wrapper of base image's `/docker-entrypoint.sh`,
-you can use the same CMD as the base image.
+you can use the same CMD as the base image (nginx).
 
 Base image:
 
@@ -135,14 +128,15 @@ docker run -it \
   -e EMAIL="your_email@address.com" \
   -e RETRY_INTERVAL=86400 \
   -v ./html:/usr/share/nginx/html \
-  -v ./certbot/etc:/etc/letsencrypt \
-  -v ./certbot/var:/var/lib/letsencrypt \
+  -v etc-letsencrypt:/etc/letsencrypt \
+  -v lib-letsencrypt:/var/lib/letsencrypt \
   -v ./templates:/etc/nginx/templates \
   --name nginx-certbot \
   galacsh/nginx-certbot-np
 ```
 
-In `./templates`, create the configuration template for obtaining the SSL certificates.
+> [!IMPORTANT]
+> In `./templates`, create the configuration template for obtaining the SSL certificates.
 
 ```text
 server {
@@ -183,3 +177,4 @@ docker stop nginx-certbot
 git commit -m "commit message should contain something like v1.0.1"
 ./build.sh
 ```
+
