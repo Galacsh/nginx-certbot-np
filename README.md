@@ -46,13 +46,8 @@ The script tries to obtain the SSL certificates if they do not exist.
 3. Obtaining the certificates is done by running the Certbot in webroot mode. (`--webroot -w /acme-challenge`)
 
 Note that `/acme-challenge` is the directory inside container where the Certbot will write the challenge files.
-Your nginx configuration should have a location block to serve the challenge files.
-
-```text
-location /.well-known/acme-challenge {
-    root /acme-challenge/;
-}
-```
+Your nginx configuration doesn't need to handle this.
+`conf.d/http-default.conf` handles this and it's already copied to the image.
 
 > [!NOTE]
 > In development mode (`MODE=dev`), this doesn't try to obtain the SSL certificates.
@@ -133,34 +128,6 @@ docker run -it \
   -v ./templates:/etc/nginx/templates \
   --name nginx-certbot \
   galacsh/nginx-certbot-np
-```
-
-> [!IMPORTANT]
-> In `./templates`, create the configuration template for obtaining the SSL certificates.
-
-```text
-server {
-    listen       80;
-    server_name  _;
-
-    
-    location /.well-known/acme-challenge {
-        root /acme-challenge/;
-    }
-
-    location / {
-        root   /usr/share/nginx/html;
-        index  index.html index.htm;
-    }
-
-    #error_page  404              /404.html;
-
-    # redirect server error pages to the static page /50x.html
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /usr/share/nginx/html;
-    }
-}
 ```
 
 ### Stop
