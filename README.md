@@ -112,28 +112,98 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ### Run
 
-This is an example of running the container with the `docker run` command.
+This is an example of running the container with the `docker compose up` command.
+
+Let's say we are configuring 2 domains, `example.com` and `example.net`.
+Create config template files for those two domains.
+
+```text
+# templates/example-1.com.conf.template
+
+server {
+    server_name ${EXAMPLE_COM};
+    listen      443 ssl;
+    listen      [::]:443 ssl;
+
+    # Certificate
+    ssl_certificate /etc/letsencrypt/live/${EX1_HOSt}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${EX1_HOSt}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        root   /usr/share/nginx/html/${EXAMPLE_COM};
+        index  index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+```text
+# templates/example.net.conf.template
+
+server {
+    server_name ${EXAMPLE_NET};
+    listen      443 ssl;
+    listen      [::]:443 ssl;
+
+    # Certificate
+    ssl_certificate /etc/letsencrypt/live/${EXAMPLE_NET}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${EXAMPLE_NET}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        root   /usr/share/nginx/html/${EXAMPLE_NET};
+        index  index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+Create `.env`.
 
 ```shell
-docker run -it \
-  -p 80:80 \
-  -p 443:443 \
-  -e MODE=prod \
-  -e DOMAINS="example.com,www.example.com example.net,www.example.net" \
-  -e EMAIL="your_email@address.com" \
-  -e RETRY_INTERVAL=86400 \
-  -v ./html:/usr/share/nginx/html \
-  -v etc-letsencrypt:/etc/letsencrypt \
-  -v lib-letsencrypt:/var/lib/letsencrypt \
-  -v ./templates:/etc/nginx/templates \
-  --name nginx-certbot \
-  galacsh/nginx-certbot-np
+MODE=prod
+
+DOMAINS=example.com example.net
+EMAIL=your-email@sample.com
+```
+
+Create `compose.yaml`.
+
+```yaml
+services:
+  app:
+    image: galacsh/nginx-certbot-np:latest
+    container_name: nginx
+    restart: always
+    volumes:
+      - etc-letsencrypt:/etc/letsencrypt
+      - lib-letsencrypt:/var/lib/letsencrypt
+      - ./templates:/etc/nginx/templates
+      - ./html:/usr/share/nginx/html
+    ports:
+      - 80:80
+    env_file:
+      - .env
+
+volumes:
+  etc-letsencrypt:
+  lib-letsencrypt:
+```
+
+Now, you can run and see logs.
+
+```shell
+docker compose up -d
+docker compose logs -f
 ```
 
 ### Stop
 
 ```shell
-docker stop nginx-certbot
+docker compose down
 ```
 
 ---
