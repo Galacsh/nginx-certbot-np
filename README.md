@@ -168,6 +168,10 @@ MODE=prod
 
 DOMAINS=example.com example.net
 EMAIL=your-email@sample.com
+
+# For nginx config templates
+EXAMPLE_COM=example.com
+EXAMPLE_NET=example.net
 ```
 
 Create `compose.yaml`.
