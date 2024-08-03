@@ -19,8 +19,9 @@ docker pull galacsh/nginx-certbot-np
 Even nginx supports many architectures, Certbot only supports the following architectures.
 So, this image is only available for the following architectures.
 
-- linux/arm/v6
 - linux/amd64
+- linux/arm64
+- linux/arm/v6
 
 ## Structure
 
