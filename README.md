@@ -29,6 +29,7 @@ So, this image is only available for the following architectures.
     - HTTP to HTTPS redirection
     - Location for ACME challenge
 - `scripts/`: Shell scripts to the nginx server and SSL certificates.
+    - `setup-dhparam.sh`: Generate DH parameters if they do not exist.
     - `obtain-cert.sh`: Obtain the SSL certificates if they do not exist.
     - `renew-cert.sh`: Tries to renew the SSL certificates every `RETRY_INTERVAL` seconds.
     - `reload-nginx.sh`: Reloads the nginx server after the SSL certificates have been renewed.
@@ -37,6 +38,15 @@ So, this image is only available for the following architectures.
 - `.env`: Environment variables for the Docker Compose configuration.
 
 ### `scripts/`
+
+#### `setup-dhparam.sh`
+
+The script tries to generate DH parameters for each domain if it doesn't exist.
+
+1. Check if already exists.
+2. If the certificates do not exist, try to generate one.
+
+Note that the generated file will be placed in `/etc/letsencrypt/live/${YOUR_DOMAIN}/ssl-dhparam.pem`.
 
 #### `obtain-cert.sh`
 
@@ -119,7 +129,7 @@ Let's say we are configuring 2 domains, `example.com` and `example.net`.
 Create config template files for those two domains.
 
 ```text
-# templates/example-1.com.conf.template
+# templates/example.com.conf.template
 
 server {
     server_name ${EXAMPLE_COM};
@@ -127,10 +137,10 @@ server {
     listen      [::]:443 ssl;
 
     # Certificate
-    ssl_certificate /etc/letsencrypt/live/${EX1_HOSt}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${EX1_HOSt}/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/${EXAMPLE_COM}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${EXAMPLE_COM}/privkey.pem;
+    ssl_dhparam /etc/letsencrypt/live/${EXAMPLE_COM}/ssl-dhparam.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     location / {
         root   /usr/share/nginx/html/${EXAMPLE_COM};
@@ -151,8 +161,8 @@ server {
     # Certificate
     ssl_certificate /etc/letsencrypt/live/${EXAMPLE_NET}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${EXAMPLE_NET}/privkey.pem;
+    ssl_dhparam /etc/letsencrypt/live/${EXAMPLE_NET}/ssl-dhparam.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     location / {
         root   /usr/share/nginx/html/${EXAMPLE_NET};

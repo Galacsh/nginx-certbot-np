@@ -25,6 +25,10 @@ RUN mkdir -p /var/lib/letsencrypt ; \
 RUN mkdir -p /var/log/letsencrypt ; \
   chown -R $nonroot:$nonroot /var/log/letsencrypt
 
+# options-ssl-nginx.conf for a secure configuration
+# https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf
+COPY --chown=$nonroot:$nonroot ./options-ssl-nginx.conf /etc/letsencrypt/options-ssl-nginx.conf
+
 # Default conf file that does:
 #   - HTTP to HTTPS redirection
 #   - ACME challenge

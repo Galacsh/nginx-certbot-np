@@ -18,40 +18,27 @@ if [ -z "$DOMAINS" ]; then
   exit 1
 fi
 
-# Email address for notifications, if empty exit with error
-if [ -z "$EMAIL" ]; then
-  echo "EMAIL environment variable is required" >&2
-  exit 1
-fi
-
 # =========================
 # == Obtain certificates ==
 # =========================
 
-# Function to handle certificate issuance or renewal
-obtain_certificate() {
+# ssl_dhparam.pem for a secure configuration
+setup_ssl_dhparam() {
   comma_seperated_domains="${1}"
   base_domain=$(echo "${comma_seperated_domains}" | cut -d ',' -f1)
   cert_path="/etc/letsencrypt/live/${base_domain}"
 
-  if [ ! -f "${cert_path}/fullchain.pem" ]; then
-    echo "No certificate found for ${base_domain}, obtaining one..."
+  mkdir -p "${cert_path}"
 
-    # obtain using webroot plugin
-    certbot certonly \
-      --webroot \
-      -w /acme-challenge \
-      -d "${comma_seperated_domains}" \
-      --email "$EMAIL" \
-      --agree-tos \
-      --no-eff-email
-
-    echo "Certificate obtained for ${base_domain}"
+  if [ ! -f "${cert_path}/ssl-dhparam.pem" ]; then
+    echo "Generating ssl-dhparam.pem file..."
+    openssl dhparam -out "$cert_path/ssl-dhparam.pem" 2048
+    echo "Generated ${cert_path}/ssl-dhparam.pem file."
   fi
 }
 
 # ==============================
 
 for domain in $DOMAINS; do
-  obtain_certificate "$domain"
+  setup_ssl_dhparam "$domain"
 done

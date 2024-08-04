@@ -28,17 +28,18 @@ wait_nginx_stop() {
 
 # ========================================================
 
-# start nginx
-/docker-entrypoint.sh "$1"
+# Generate dh parameters for each domain.
+/scripts/setup-dhparam.sh
 
-wait_nginx_start
-
-/scripts/obtain-cert.sh
+# Start auto renewal service.
 /scripts/renew-cert.sh &
 
-# ============================
-# == Restart nginx as PID 1 ==
-# ============================
+# start nginx
+nginx
+wait_nginx_start
+
+# Try obtaining certs.
+/scripts/obtain-cert.sh
 
 echo "Stopping nginx..."
 
@@ -46,4 +47,9 @@ echo "Stopping nginx..."
 nginx -s stop
 wait_nginx_stop
 
-exec "$@"
+# =================================================
+# == Restart nginx with other entrypoint scripts ==
+# =================================================
+
+# start nginx
+exec /docker-entrypoint.sh "$@"
