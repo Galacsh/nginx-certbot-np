@@ -21,10 +21,13 @@ fi
 
 # Build image and tag with version and latest
 # Supports: linux/arm/v6, linux/amd64
+#
+# With Docker Desktop + "Use containerd for pulling and storing images" option enabled,
+# we can use default builder to create multiplatform image.
+docker build \
+  --platform linux/arm64,linux/arm/v6,linux/amd64 \
+  -t "$REPOSITORY:$VERSION" \
+  -t "$REPOSITORY:latest" .
 
-# Create builder if not exists
-if ! docker buildx inspect nginx-certbot-np-builder &>/dev/null; then
-  docker buildx create --name nginx-certbot-np-builder
-fi
-
-docker buildx build --push --builder nginx-certbot-np-builder --platform linux/arm64,linux/arm/v6,linux/amd64 -t "$REPOSITORY:$VERSION" -t "$REPOSITORY:latest" .
+docker push "$REPOSITORY:$VERSION"
+docker push "$REPOSITORY:latest"
